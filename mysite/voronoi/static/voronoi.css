@@ -1,0 +1,113 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  padding: 0px
+}
+
+.full-area { 
+	height: 100%;
+	margin: 0px;
+	padding: 0px 
+}
+
+.rem-area {
+		height: 87%;
+}
+.split-area { 
+	height: 100%;
+	margin: 0px;
+	padding: 0px 
+}
+
+#map_container {position: relative; height: 100%; width: 100%;}
+.homemap { position:absolute; top: 0; right: 0; bottom: 0; left: 0;}
+
+
+.second-navbar{
+  margin-top:-20px;
+}
+
+/* below fixes the input group width issue */
+.clear {
+    width: 1%;
+    display: table-cell;
+    padding-left: 3px;
+    vertical-align: middle; }
+.clear a:hover { text-decoration: none; }
+
+
+/* CSS talk bubble */
+.talk-bubble {
+	margin: 40px;
+  display: inline-block;
+  position: relative;
+	width: 80%;
+	height: auto;
+	background-color: lightblue;
+}
+.border{
+  border: 8px solid #666;
+}
+/* Right triangle placed top left flush. */
+.tri-right.border.left-top:before {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: -40px;
+	right: auto;
+  top: -8px;
+	bottom: auto;
+	border: 32px solid;
+	border-color: #666 transparent transparent transparent;
+}
+.tri-right.left-top:after{
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: -20px;
+	right: auto;
+  top: 0px;
+	bottom: auto;
+	border: 22px solid;
+	border-color: lightblue transparent transparent transparent;
+}
+
+/* talk bubble contents */
+.talktext{
+  padding: 1em;
+	text-align: left;
+  line-height: 1.5em;
+}
+.talktext p{
+  /* remove webkit p margins */
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+}
+
+div.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.pager {
+padding-top: 20px;
+padding-left: 40px;
+}
+.pager .page a {
+border: 3px solid #bbbbbb;
+margin-left: 1px;
+margin-right: 1px;
+padding-left: 4px;
+padding-right: 4px;
+text-decoration: none;
+color: #000000;
+}
+.pager .current {
+border: 3px solid #444444;
+margin-left: 2px;
+margin-right: 2px;
+padding-left: 2px;
+}

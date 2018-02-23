@@ -1,0 +1,14 @@
+{% if is_present %}
+<div>
+   <h4> Nearby houses</h4>
+   {% for house in houses %}
+
+      {% include "house_small_banner.html" %}  
+      <hr>
+
+   {% endfor %}
+
+
+</div>
+
+{% endif %}

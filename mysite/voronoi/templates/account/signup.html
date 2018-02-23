@@ -1,0 +1,29 @@
+{% extends "base_includes.html" %}
+{% block allcontent %}
+
+{% load i18n %}
+
+{% load account %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+  <form id="signupform"   method="POST" role="form" action="{% url 'account_signup' %}">
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          {{ form|crispy }}
+          <div>
+          <button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
+          </div>
+          or
+          <br/>
+          <div>
+           <a id="btn-fblogin" href="/accounts/facebook/login" class="btn btn-primary">Signup with Facebook</a>
+           </div>
+            <br/>
+           <div>
+           <a id="btn-googlelogin" href="/accounts/google/login" class="btn btn-primary">Login with Google</a>
+           </div>
+  </form>  
+
+{% endblock %}

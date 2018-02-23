@@ -1,0 +1,54 @@
+  {% load util_tags %}
+  {% get_rent_options as rent_options %}
+
+
+  <nav class="navbar navbar-default second-navbar" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Voronoi</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav dropdownfilter">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" id="rentDropDown" data-toggle="dropdown"> <span>Rent </span> <b class="caret"></b></a>
+          <ul class="dropdown-menu filter" name="rent">
+                {% for rent in rent_options %}
+                  <li><a prefix = "Rent" tabindex =  {{ forloop.counter }} value="{{ rent.value }}">{{ rent.text }} $</a></li>
+                {% endfor %}
+             </ul>
+      </li>
+    </ul>
+
+    <ul class="nav navbar-nav dropdownfilter">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>Bus Stop</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu filter" name="bus_stop_time">
+                  <li><a prefix = "Bus Stop" tabindex ="0" value="">Anything</a></li>
+                  <li><a prefix = "Bus Stop" tabindex ="0" value="10">&lt; 10 min walk</a></li>
+                  <li><a prefix = "Bus Stop" tabindex ="0" value="15"> &lt; 15 min walk</a></li> 
+                  <li><a prefix = "Bus Stop" tabindex ="0" value="20"> &lt; 20 min walk</a></li> 
+             </ul>
+      </li>
+    </ul>
+
+    <div class="col-sm-5 col-md-5">
+        <form class="navbar-form" role="search" method="GET" role="form"  action="/voronoi/search/" >
+        <div class="input-group" style="width: 100%">
+              <input id="search2" class="form-control" type="text" placeholder="Address, Neighborhood or Zipcode"   >
+        </div>
+        <input type="hidden" default="0" class="form-control"  name="rent">
+        <input type="hidden" default="0" class="form-control" name="bus_stop_time">
+        <input type="hidden" default="0" class="form-control" id="searchType" name="">
+        </form>
+    </div>
+  </div>
+</nav>
+

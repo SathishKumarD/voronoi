@@ -1,0 +1,11 @@
+dj-database-url>=0.4.0
+Django>=1.9.2
+gunicorn>=19.4.5
+psycopg2>=2.6.1
+whitenoise>=2.0.6
+django-allauth==0.28.0
+django-review
+django-user-media
+django-taggit
+django-vote
+django-crispy-forms

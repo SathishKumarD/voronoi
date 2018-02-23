@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load staticfiles %}
+{% load review_tags %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html>
+
+<body >
+  {% load util_tags %}
+  {% get_house_tags house as house_tags %}
+
+  {% get_reviews2 house user as reviews %}
+  {% get_category_averages house as category_averages %}
+  {% get_review_average house as review_average %}
+
+  {% with reviews.this_user_review  as my_review %}
+
+
+  <div class=" text-center">
+  
+    <div class="row">
+      <div class="col-sm-2 well">
+        <div class="well">  
+          <img src='https://maps.googleapis.com/maps/api/streetview?size=400x400&location={{ house.address|remove_spaces }}&key=AIzaSyDDrpZPO-lMaqG8eL3EJJYNgmCQvWdweL4' height="90%" width="90%" alt="Avatar">
+        </div>
+        <div class="well">
+          <p><a href="#">Tags</a></p>
+          <p>
+          {% for tag in house_tags %}
+            <a class="label label-default">{{ tag }}</a>
+          {% endfor %}
+          </p>
+          {% include "ratings.html" %}  
+        </div>
+    </div>
+    <div class="col-sm-7 text-left">
+      <h3 class="text-primary"> {{ house.address }} </h3>
+      <div id="map" style="width: 100%; height: 300px; border: 1px solid #ccc; "></div>
+
+      {% if user.is_authenticated and reviews.user_has_review  %}
+        
+        <h4 class="text-primary"> My review</h4>
+        <hr>
+        <div class="panel panel-default">
+            {% include "review_banner.html" with review=my_review %} 
+
+      {% else %}
+      <div style="padding: 10px">
+        <a class="btn btn-primary" href="/review/house/{{house.id}}/create" >Write Review</a>
+      </div>
+     {% endif %}
+
+     {% if user.is_authenticated and reviews.user_has_review and reviews.other_user_reviews|length >= 1 %}
+          <h4 class="text-primary"> Other People Reviews</h4>
+        <hr>
+      {% else %}
+          <h4 class="text-primary"> Reviews </h4>
+        <hr>
+     {% endif %}
+
+     {% for review in reviews.other_user_reviews %}
+        {% include "review_banner.html" %}  
+      {% endfor %}
+
+    </div>
+    <div class="col-sm-3 ">
+    {% load nearby_places %}{% nearby_places house.latitude house.longitude 1 5 %}
+
+    </div>
+  </div>
+</div>
+
+</body>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsz_RxtjwJwMKQcSl-f8FHSks9j7KR-WA&libraries=places&callback=initMap3" async defer></script>
+<script type="text/javascript">
+
+ 
+
+  function initMap3() {
+    var pyrmont = { lat: {{ house.latitude }}, lng: {{ house.longitude }}  };
+
+    var circle_house = {
+      path: google.maps.SymbolPath.CIRCLE,
+      fillColor: 'green',
+      fillOpacity: .4,
+      scale: 7,
+      strokeColor: 'white',
+      strokeWeight: 1
+    };
+
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: pyrmont,
+      zoom: 15
+    });
+    var marker = new google.maps.Marker({
+      position: new google.maps.LatLng({{ house.latitude }}, {{ house.longitude }}),
+      icon: circle_house,
+      map: map
+    });
+
+    infowindow = new google.maps.InfoWindow();
+    var service = new google.maps.places.PlacesService(map);
+    service.nearbySearch({
+      location: pyrmont,
+      radius: 500,
+      keyword :'grocery',
+      type:['store'],
+    }, callback);
+/*
+  var service2 = new google.maps.places.PlacesService(map);
+  service2.nearbySearch({
+    location: pyrmont,
+    radius: 500,
+    type: ['department_store']
+  }, callback); */
+  
+/*
+   var service3 = new google.maps.places.PlacesService(map);
+  service3.nearbySearch({
+    location: pyrmont,
+    radius: 1000,
+    type: ['convenience_store']
+  }, callback);
+  */
+
+}
+
+
+
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}/static/places_maps.js"></script> 
+<script type="text/javascript" src="{{ STATIC_URL }}/static/jquery.rateit.min.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/static/tag-it.min.js"></script> 
+<link rel="stylesheet" href="{{ STATIC_URL }}/static/rateit.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}/static/jquery.tagit.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}/static/tagit.ui-zendesk.css">
+
+<script>
+ $('div.rateit').rateit();
+
+  $("#reviewform div.rateit").bind('rated', function (event, value){
+   var caller = $(event.target);
+   $('input[name='+caller[0].id+']').val(value);
+ });
+
+
+function load_sitewide_tags()
+{
+    $.ajax({
+    dataType: "json",
+    url: '/review/tags/',
+    success: success
+  });
+
+  function success(tag_objects){
+   var tags = []
+   for (var i = tag_objects.length - 1; i >= 0; i--) {
+     tags.push(tag_objects[i].fields.name);
+   }
+   populate_tag_suggestions(tags);
+  }
+
+}
+
+load_sitewide_tags();
+
+function populate_tag_suggestions(tags){
+
+  $("#reviewtags").tagit({
+
+    // Options
+    fieldName: "skills",
+    availableTags:tags,
+    autocomplete: {delay: 0, minLength: 2},
+    showAutocompleteOnFocus: false,
+    removeConfirmation: false,
+    caseSensitive: true,
+    allowDuplicates: false,
+    allowSpaces: false,
+    readOnly: false,
+    tagLimit: null,
+    singleField: false,
+    singleFieldDelimiter: ',',
+    singleFieldNode: null,
+    tabIndex: null,
+    placeholderText: null,
+
+    // Events
+    beforeTagAdded: function(event, ui) {
+        console.log(ui.tag);
+    },
+    afterTagAdded: function(event, ui) {
+        console.log(ui.tag);
+    },
+    beforeTagRemoved: function(event, ui) {
+        console.log(ui.tag);
+    },
+    onTagExists: function(event, ui) {
+        console.log(ui.tag);
+    },
+    onTagClicked: function(event, ui) {
+        console.log(ui.tag);
+    },
+    onTagLimitExceeded: function(event, ui) {
+        console.log(ui.tag);
+    }
+  });
+
+}
+
+
+
+</script>
+
+</html>
+{% endwith %}
+{% endblock %}
+

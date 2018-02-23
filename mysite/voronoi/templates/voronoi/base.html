@@ -1,0 +1,189 @@
+{% extends "base_includes.html" %}
+{% block allcontent %}
+
+</head>
+<body>
+
+<div class="allheader">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Home</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+      {% if request.user.is_authenticated %}
+                    <a href="/accounts/logout" ><span class="glyphicon glyphicon-log-out"></span> Log out</a>
+      {% else %}
+          <a href="#myModal" data-toggle="modal" data-target="#myModal" ><span class="glyphicon glyphicon-log-in"></span> Login</a>
+      {% endif %}
+        </li>
+      </ul>
+      <div id="loginsuccess"></div>
+    </div>
+  </div>
+</nav>
+
+<div class="row">
+      {% include "search_bar.html" %}  
+</div>
+</div>
+
+
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body" >
+         <ul class="nav nav-tabs nav-justified">
+          <li class="active"><a data-toggle="tab" href="#signupdiv">Sign up</a></li>
+          <li><a data-toggle="tab" href="#logindiv">Login</a></li>
+        </ul>
+        <div class="tab-content">
+        <div id="signupdiv" class="tab-pane fade in active"></div>
+        <div id="logindiv" class="tab-pane fade">login</div>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<div class="login_body rem-area">
+{% block body %}
+    {% if messages %}
+        <div>
+            <strong>Messages:</strong>
+            <ul>
+                {% for message in messages %}
+                    <li>{{message}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block extra_body %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+{% block main %}
+{% endblock %}
+
+</div>
+</body>
+
+
+<script type="text/javascript">
+$('.navbar-lower').affix({
+  offset: {top: 50}
+});
+
+$.ajaxSetup({ 
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     } 
+});
+
+
+initialize_loginforms("/accounts/signup",'#signupform',"#signupdiv");
+initialize_loginforms("/accounts/login",'#loginform',"#logindiv");
+
+
+
+
+function initialize_loginforms(url,form_id, div_id)
+{
+    $.ajax({
+    url: url,
+    cache: false,
+    success: function(html){
+      $(div_id).html(html);
+      $(form_id).submit(function(event){
+        event.preventDefault();
+        post_login(form_id,div_id);
+        return false;
+        });
+      },
+    error: function(req, err){ console.log('my message' + err); }
+  });
+}
+
+
+
+function post_login(form_id, div_id){
+  var frm = $(form_id);
+  $.ajax({
+    type: frm.attr('method'),
+    url: frm.attr('action'),
+    data: frm.serialize(),
+    success: function (data) {
+      console.log("success");
+      console.log($("button[data-dismiss='modal']"));
+      $("button[data-dismiss='modal']").trigger("click");
+      $("button[data-dismiss='modal']").trigger("click");
+      update_csrf_token();
+      //location.reload();
+    },
+    error: function(data) {
+      console.log("failure");
+      console.log(data.responseJSON.html);
+      $(div_id).html(data.responseJSON.html);
+    }
+  });
+}
+
+function update_csrf_token(){
+  csrf_token= getCookie('csrftoken');
+  $("input[name='csrfmiddlewaretoken']").val(csrf_token);
+}
+
+function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+
+
+
+</script>
+
+{% endblock %}

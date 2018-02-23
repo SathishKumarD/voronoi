@@ -1,0 +1,31 @@
+  {% load util_tags %}
+
+<div class="row">
+<ul class="pagination">
+   {% if has_previous %}
+      <li><a href="?{% url_replace 'page' previous %}">&laquo;</a></li>
+   {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+   {% endif %}
+
+   {% for i in page_numbers %}
+      {% if page == i %}
+         <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+         <li><a href="?{% url_replace 'page' i %}">{{ i }}</a></li>
+      {% endif %}
+   {% endfor %}
+
+   {% if show_last %}
+      <li class="page"><a href="?{% url_replace 'page' pages %}">{{ pages }}</a></li>
+   {% endif %}
+   
+   {% if has_next %}
+      <li><a href="?{% url_replace 'page' next %}">&raquo;</a></li>
+   {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+   {% endif %}
+</ul>
+
+<div>
+

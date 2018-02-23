@@ -1,0 +1,12 @@
+{% if hot_houses %}
+    <ul>
+    {% for house in hot_houses %}
+        <li><a href="{% url 'voronoi:detail' house.id %}">{{ house }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p> No house matches search criteria.</p>
+{% endif %}
+
+
+

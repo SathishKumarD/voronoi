@@ -1,0 +1,18 @@
+{% load util_tags %}
+{% load i18n %}
+
+
+<div class="container-fluid"> 
+	<div class="row">
+	<div class="col-xs-3">
+	<img src='https://maps.googleapis.com/maps/api/streetview?size=400x400&location={{ house.address|remove_spaces }}&key=AIzaSyDDrpZPO-lMaqG8eL3EJJYNgmCQvWdweL4' height="100%" width="100%" alt="Avatar">
+	</div>
+	<div class= "col-xs-9 text-left"> 
+		<div> <a href="/{{ house.id }}"> {{ house.house_number }} {{ house.street }}</a></div>
+		<div> {{ house.rent }} $ {{house.rent_type }} 
+		({% trans "for" %} {{ house.bed_rooms }} {% trans "rooms" %})</div>
+		<div> {{ house.bus_stop_distance|divide:1609.34 }} {% trans "miles" %} {% trans " walk to bus stop " %}</div>
+	</div>
+</div>
+</div>
+

@@ -1,0 +1,21 @@
+{% load util_tags %}
+{% load i18n %}
+
+<div class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+    <div class="row text-left"> 
+      <div class="col-sm-1 ">
+            <img src="{{ STATIC_URL }}/static/img/profile_default.png" class="img-circle" height="65" width="65" alt="Avatar">
+          </div>
+      <div class="col-sm-11 text-left">
+      <h4>{{ review.user.username }} <small>{{review.creation_date}}</small></h4>
+      <p> {% if review.content %}
+      {{ review.content|truncatewords:'70' }}
+      {% endif %}</p>
+      <br>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

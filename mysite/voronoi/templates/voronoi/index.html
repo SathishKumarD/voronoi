@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid full-area">
+<div class="row full-area" style="margin-top: -20px">
+<div class="col-sm-6 full-area">
+    <div id= "map_container" >
+    <div class="homemap" id="map" ></div>
+    </div>
+</div>
+<div class="col-sm-6" >
+<div id="results" style="overflow: auto;"></div>
+</div>
+</div>
+
+
+
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_st747TiA1CUIsOvTfwC5rP03GeuX5Lo&signed_in=true&libraries=places&callback=initmap2" async defer></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/static/maps.js"></script> 
+
+
+{% endblock %}
+
+

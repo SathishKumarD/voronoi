@@ -1,0 +1,22 @@
+{% load review_tags %}
+{% load i18n %}
+
+<div class="alert alert-success fade in">
+ Average rating: 
+
+ <div class="rateit" data-rateit-value="{{ review_average|floatformat }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+ <strong>   {{ review_average|floatformat }}/5 </strong>
+</div>
+
+<table class="table">
+  {% for category, average_rating in category_averages.iteritems %}
+  <tr>
+    <th>{{ category.name }}:</th>
+    <td><div class="rateit" data-rateit-value="{{ average_rating|floatformat }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div></td>
+  </tr>
+  {% endfor %}
+  <tr>
+    {% get_review_count house as review_amount %}
+    <th>{% trans "Amount of reviews" %}:</th><td>{{ review_amount }}</td>
+  </tr>
+</table>

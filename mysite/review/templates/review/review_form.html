@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block  content %}
+
+{% load i18n %}
+
+{% load account %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<div class="container ">
+
+	<div class="panel panel-primary">
+	<div class="panel-heading">{{ reviewed_item }}
+	</div>
+	</div>
+
+	<div class="panel-body">
+		<div class = "row ">
+		<div class="col-sm-7 ">
+			<form id="reviewform"   method="POST" role="form" action=".">
+				{% csrf_token %}
+				{{ form.non_field_errors }}
+				{% crispy form %}
+				<br/>
+			</form>  
+		</div>
+		<div class="col-sm-5">
+		<div class="talk-bubble tri-right left-top">
+  <div class="talktext">
+    <p>
+			<h4> Review writing tips</h4>
+
+			Help your fellow renters get the most out of your review with the following tips:
+			<br/>
+			<br/>
+
+			<strong>Be Specific </strong>- Don't just complain about something but rather describe specific thing you do or don't like. Explain what happened. We've found users lend more weight to a review with details.
+			<br/>
+			<br/>
+			<strong>Be Courteous and Honest </strong>- Describe your experience, be it good or bad, but don't go overboard. Keep your review precise and to the point. We value open expression, but profanity and hateful speech are not allowed on the site.
+			<br/>
+			<br/>
+			<strong>Add Photos </strong>- A picture tells a thousand words, or so they say.
+			No Personal Info - We don't allow reviews with names, phone numbers, email or other contact info, so please avoid using it.
+			</p>
+			</div>
+		</div>
+
+		</div>
+
+	</div>
+
+
+
+	
+	</div>
+</div>
+
+{% endblock %}
